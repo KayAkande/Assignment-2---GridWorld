@@ -27,6 +27,7 @@ TRAP_COLOR = (255, 0, 0)    # Red
 
 ITERATIONAMOUNT = 100
 DELAY = 1
+ACTIONS = {"up", "down", "right", "left"}
 
 random.seed(100)
 

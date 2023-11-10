@@ -110,7 +110,7 @@ def display(self):
 def setup_pygame():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Grid World")
+    pygame.display.set_caption("Grid World with MDP")
     clock = pygame.time.Clock()
     return screen, clock
 
