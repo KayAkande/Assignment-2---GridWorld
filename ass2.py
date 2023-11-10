@@ -1,10 +1,12 @@
-# -*- coding: utf-8 -*-
+
 """
 COSC-4117EL: Assignment 2 Problem Domain
 
 This code provides a basic and interactive grid world environment where a robot can navigate using the arrow keys. The robot encounters walls that block movement, gold that gives positive rewards, and traps that give negative rewards. The game ends when the robot reaches its goal. The robot's score reflects the rewards it collects and penalties it incurs.
 
 """
+import random
+import time
 
 import pygame
 import numpy as np
@@ -24,9 +26,16 @@ GOLD_COLOR = (255, 255, 0)  # Yellow
 TRAP_COLOR = (255, 0, 0)   # Red
 
 
+ACTIONS = ["up", "down", "left", "right"] #Action space
+DELAY = 1;
+STOCHASITY = 0.2;
+TRANSITION_PROBABILITY = 0.25;
+
+
 random.seed(100)
 
 class GridWorld:
+
     def __init__(self, size=GRID_SIZE):
         self.size = size
         self.grid = np.zeros((size, size))
@@ -35,6 +44,8 @@ class GridWorld:
         self.goal = (random.randint(0, size-1), random.randint(0, size-1))
         self.robot_pos = self.start
         self.score = 0
+      
+        self.states = [(x, y) for x in range(size) for y in range(size)]   #generating state space
         self.generate_walls_traps_gold()
 
     def generate_walls_traps_gold(self):
@@ -117,42 +128,54 @@ def draw_grid(world, screen):
                        int(CELL_SIZE/3))
 
 
+def randomMovement ():
+    randomNum = random.randint(1, 4)
+    if (randomNum == 1):
+        return "up";
+    elif (randomNum == 2):
+        return "down";
+    elif (randomNum == 3):
+        return "left";
+    elif (randomNum == 4):
+        return "right";
+
+
+
+
 def main():
-    """Main loop"""
+
     screen, clock = setup_pygame()
     world = GridWorld()
     running = True
+
     while running:
-        # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.KEYDOWN:
-                # Move robot based on arrow key press
-                if event.key == pygame.K_UP:
-                    world.move("up")
-                if event.key == pygame.K_DOWN:
-                    world.move("down")
-                if event.key == pygame.K_LEFT:
-                    world.move("left")
-                if event.key == pygame.K_RIGHT:
-                    world.move("right")
-                # Print the score after the move
-                print(f"Current Score: {world.score}")
-                # Check if the robot reached the goal
-                if world.robot_pos == world.goal:
-                    print("Robot reached the goal!")
-                    print(f"Final Score: {world.score}")
-                    running = False
-                    break
-        # Rendering
+
         screen.fill(EMPTY_COLOR)
         draw_grid(world, screen)
         pygame.display.flip()
 
         clock.tick(10)  # FPS
 
+        if running == True :
+            world.move(randomMovement())  # Call the function to get the direction
+            print(f"Current Score: {world.score}")
+            time.sleep(DELAY)
+
+        if world.robot_pos == world.goal:
+            print("Robot reached the goal!")
+            print(f"Final Score: {world.score}")
+            running = False
+            break
+
     pygame.quit()
 
+
+
+
 if __name__ == "__main__":
+    world = GridWorld()
     main()
+

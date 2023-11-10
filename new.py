@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 COSC-4117EL: Assignment 2 Problem Domain
 
